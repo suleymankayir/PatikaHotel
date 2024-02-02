@@ -367,6 +367,7 @@ public class EmployeeView extends Layout {
         this.fld_search_check_out.setText("15/02/2023");
 
     }
+
     private boolean isNumeric(String strNum) {
         if (strNum == null) {
             return false;
