@@ -28,33 +28,40 @@ public class UserUpdateView extends Layout{
         this.user = user;
         this.userManager = new UserManager();
 
+        // Load all users into role comboBox
         for (User u : this.userManager.findAll()){
             this.cmb_update_role.addItem(new ComboItem(u.getId(), u.getRole()));
         }
 
+        // Pre-fill fields with existing user data if updating an existing user
         if (this.user.getId() != 0){
             this.fld_username.setText(this.user.getUsername());
             this.fld_password.setText(this.user.getPassword());
             ComboItem defaultUser = new ComboItem(this.user.getId(),this.user.getRole());
             this.cmb_update_role.getModel().setSelectedItem(defaultUser);
         }
+        // ActionListener for update/save button
         btn_update_save.addActionListener(e -> {
+            // Check if required fields are filled
             if (Helper.isFieldListEmpty(new JTextField[]{this.fld_username,this.fld_password})){
                 Helper.showMessage("fill");
             } else {
                 boolean result = false;
 
+                // Get selected role from comboBox
                 ComboItem selectedItem = (ComboItem) cmb_update_role.getSelectedItem();
+                // Update user object with new data
                 this.user.setUsername(fld_username.getText());
                 this.user.setPassword(fld_password.getText());
                 this.user.setRole(selectedItem.getValue());
 
+                // Save or update user based on ID
                 if (this.user.getId() != 0){
                     result = this.userManager.update(this.user);
                 } else {
                     result = this.userManager.save(this.user);
                 }
-
+                // Show appropriate message based on the result
                 if (result){
                     Helper.showMessage("done");
                     dispose();

@@ -71,6 +71,8 @@ public class EmployeeView extends Layout {
     }
 
     public EmployeeView(User user) {
+
+        // Initializing managers
         this.hotelManager = new HotelManager();
         this.seasonManager = new SeasonManager();
         this.pensionManager = new PensionManager();
@@ -80,12 +82,14 @@ public class EmployeeView extends Layout {
         this.add(container);
         this.guiInitialize(1200, 600);
 
+        // If no user is logged in, dispose the view
         if (user == null) {
             dispose();
         }
-
+        // Setting the welcome label text
         this.emp_lbl_welcome.setText("Patika Acente Sistemi");
 
+        // Loading components and tables
         loadComponent();
 
         loadHotelTable(null);
@@ -102,7 +106,7 @@ public class EmployeeView extends Layout {
 
     }
 
-
+    // Method to load basic components
     private void loadComponent() {
         emp_logout_btn.addActionListener(e -> {
             LoginView loginView = new LoginView();
@@ -110,9 +114,11 @@ public class EmployeeView extends Layout {
         });
     }
 
-
+    // Methods to load data into tables
     public void loadHotelTable(ArrayList<Object[]> hotelList) {
+        // Setting column name
         col_hotel = new Object[]{"ID", "Otel Adı", "Adres", "Email", "Telefon", "Yıldız", "Otopark", "WiFi", "Havuz", "Gym", "Konsiyerj", "Spa", "Oda Servisi"};
+        // If reservationList is null, populate it with all reservations
         if (hotelList == null) {
             hotelList = this.hotelManager.getForTable(col_hotel.length, this.hotelManager.findAll());
         }
@@ -120,6 +126,7 @@ public class EmployeeView extends Layout {
     }
 
     public void loadReservationTable(ArrayList<Object[]> reservationList) {
+        // Setting column name
         col_reservation = new Object[]{"ID", "Oda ID", "İsim", "T.C.", "Giriş Tarihi", "Çıkış Tarihi", "Misafir Sayısı", "Toplam Fiyat", "Email", "Telefon"};
         if (reservationList == null) {
             reservationList = this.reservationManager.getForTable(col_reservation.length, this.reservationManager.findAll());
@@ -128,6 +135,7 @@ public class EmployeeView extends Layout {
     }
 
     public void loadSeasonTable(ArrayList<Object[]> seasonList) {
+        // Setting column name
         col_season = new Object[]{"Otel ID", "Başlangıç Tarihi", "Bitiş Tarihi"};
         if (seasonList == null) {
             seasonList = this.seasonManager.getForTable(col_season.length, this.seasonManager.findAll());
@@ -137,7 +145,7 @@ public class EmployeeView extends Layout {
     }
 
     public void loadPensionTable(ArrayList<Object[]> pensionList) {
-
+        // Setting column name
         col_pension = new Object[]{"Otel ID", "Pansiyon Tipi"};
         if (pensionList == null) {
             pensionList = this.pensionManager.getForTable(col_pension.length, this.pensionManager.findAll());
@@ -146,6 +154,7 @@ public class EmployeeView extends Layout {
     }
 
     public void loadRoomTable(ArrayList<Object[]> roomList) {
+        // Setting column name
         col_room = new Object[]{"Oda ID", "Otel ID", "Sezon ID", "Pansiyon ID", "Oda Tipi", "Stok", "Yetişkin Fiyat", "Çoçuk Fiyat", "Metrekare", "Yatak Sayısı", "TV", "Bar", "Konsol", "Kasa", "Projeksiyon"};
         if (roomList == null) {
             roomList = this.roomManager.getForTable(col_room.length, this.roomManager.findAll());
@@ -153,13 +162,15 @@ public class EmployeeView extends Layout {
         createTable(this.tmdl_room, this.tbl_room, col_room, roomList);
     }
 
-   // Değerlendirme Formu - 8
+    // Değerlendirme Formu - 8
     // Değerlendirme Formu - 10
+    // Methods to load components for specific tables
     private void loadHotelComponent() {
         tableSelectedRow(this.tbl_hotel);
         this.hotel_menu = new JPopupMenu();
         this.hotel_menu.add("Ekle").addActionListener(e -> {
             // Değerlendirme Formu - 13
+            // Opening the hotel addition view
             HotelAddView hotelAddView = new HotelAddView(new Hotel());
             hotelAddView.addWindowListener(new WindowAdapter() {
                 @Override
@@ -170,6 +181,7 @@ public class EmployeeView extends Layout {
         });
         // Değerlendirme Formu - 11
         this.hotel_menu.add("Sezon Ekle").addActionListener(e -> {
+            // Adding a new season for the selected hotel
             int selectHotelId = this.getTableSelectedRow(tbl_hotel, 0);
 
             SeasonAddView seasonAddView = new SeasonAddView(this.hotelManager.getById(selectHotelId));
@@ -185,6 +197,7 @@ public class EmployeeView extends Layout {
         });
         // Değerlendirme Formu - 12
         this.hotel_menu.add("Pansiyon Ekle").addActionListener(e -> {
+            // Adding a new pension for the selected hotel
             int selectedHotelId = this.getTableSelectedRow(tbl_hotel, 0);
             PensionAddView pensionAddView = new PensionAddView(this.hotelManager.getById(selectedHotelId));
             pensionAddView.addWindowListener(new WindowAdapter() {
@@ -217,19 +230,23 @@ public class EmployeeView extends Layout {
         this.room_menu = new JPopupMenu();
         // Değerlendirme Formu - 18
         this.room_menu.add("Rezervasyon Ekle").addActionListener(e -> {
+
+            // Adding a new reservation for the selected room
             int selectedRoomId = this.getTableSelectedRow(tbl_room, 0);
             String inDate = (this.fld_search_check_in.getText());
             String outDate = (this.fld_search_check_out.getText());
             int adultNum = Integer.parseInt(this.fld_num_adult.getText());
             int childNum = Integer.parseInt(this.fld_num_child.getText());
-            if (Helper.isFieldListEmpty(new JTextField[]{this.fld_search_check_in,this.fld_search_check_out,this.fld_num_adult,this.fld_num_child})){
+            if (Helper.isFieldListEmpty(new JTextField[]{this.fld_search_check_in, this.fld_search_check_out, this.fld_num_adult, this.fld_num_child})) {
                 Helper.showMessage("fill");
+
             } else {
                 ReservationAddView reservationAddView = new ReservationAddView(null, this.roomManager.getById(selectedRoomId), inDate, outDate, adultNum, childNum);
                 reservationAddView.addWindowListener(new WindowAdapter() {
                     @Override
                     public void windowClosed(WindowEvent e) {
                         // Değerlendirme Formu - 19
+                        // Updating tables after reservation addition
                         reservationManager.decreaseRoomStock(selectedRoomId);
                         loadReservationTable(null);
                         loadRoomTable(null);
@@ -241,12 +258,15 @@ public class EmployeeView extends Layout {
         });
         this.tbl_room.setComponentPopupMenu(room_menu);
         btn_room_search.addActionListener(e -> {
-                int adultNum = Integer.parseInt(fld_num_adult.getText());
-                int childNum = Integer.parseInt(fld_num_child.getText());
-                if (adultNum+childNum <= 0){
-                    Helper.showMessage("Lütfen geçerli kişi sayısı giriniz");
-                    return;
-                }
+            // Searching for rooms based on given criteria
+            String inDate = (this.fld_search_check_in.getText());
+            String outDate = (this.fld_search_check_out.getText());
+            int adultNum = Integer.parseInt(fld_num_adult.getText());
+            int childNum = Integer.parseInt(fld_num_child.getText());
+            if (adultNum + childNum <= 0) {
+                Helper.showMessage("Lütfen geçerli şekilde tarih veya kişi sayısı giriniz");
+                return;
+            }
 
             ArrayList<Room> roomList = this.roomManager.searchForRoom(
 
@@ -262,7 +282,7 @@ public class EmployeeView extends Layout {
             loadRoomTable(roomRow);
         });
         btn_cncl_search.addActionListener(e -> {
-
+            // Canceling the room search and resetting fields
             loadRoomTable(null);
             this.fld_hotel_name.setText(null);
             this.fld_hotel_address.setText(null);
@@ -273,6 +293,7 @@ public class EmployeeView extends Layout {
         });
 
         btn_add_room.addActionListener(e -> {
+            // Opening the room addition view
             RoomAddView roomAddView = new RoomAddView(new Room());
             roomAddView.addWindowListener(new WindowAdapter() {
                 @Override
@@ -287,7 +308,7 @@ public class EmployeeView extends Layout {
         tableSelectedRow(tbl_reservation);
         this.reservation_menu = new JPopupMenu();
         this.reservation_menu.add("Güncelle").addActionListener(e -> {
-
+            // Updating a reservation
             int selectedReservationId = this.getTableSelectedRow(tbl_reservation, 0);
             Reservation selectReservation = this.reservationManager.getById(selectedReservationId);
             int selectedRoomId = selectReservation.getRoom_id();
@@ -300,7 +321,7 @@ public class EmployeeView extends Layout {
             reservationAddView.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {
-
+                    // Updating tables after reservation update
                     loadReservationTable(null);
                     loadRoomTable(null);
                 }
@@ -308,12 +329,14 @@ public class EmployeeView extends Layout {
         });
         // Değerlendirme Formu - 22
         this.reservation_menu.add("Sil").addActionListener(e -> {
+            // Deleting a reservation
             if (Helper.confirm("sure")) {
                 int selectedReservationId = this.getTableSelectedRow(tbl_reservation, 0);
                 Reservation selectReservation = this.reservationManager.getById(selectedReservationId);
                 int selectedRoomId = selectReservation.getRoom_id();
 
                 if (this.reservationManager.delete(selectedReservationId)) {
+                    // Deleting the reservation and updating tables
                     // Değerlendirme Formu - 24
                     Helper.showMessage("done");
                     // Değerlendirme Formu - 23
@@ -331,7 +354,7 @@ public class EmployeeView extends Layout {
 
     }
 
-
+    // Method to create UI components with formatted text fields
     private void createUIComponents() throws ParseException {
         this.fld_search_check_in = new JFormattedTextField(new MaskFormatter("##/##/####"));
         this.fld_search_check_out = new JFormattedTextField(new MaskFormatter("##/##/####"));

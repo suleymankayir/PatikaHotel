@@ -29,17 +29,18 @@ public class HotelAddView extends Layout {
         this.hotel = hotel;
         this.hotelManager = new HotelManager();
 
-
-
-
         btn_otel_add.addActionListener(e -> {
+            // Check if required fields are filled
             if(Helper.isFieldListEmpty(new JTextField[]{this.fld_hotel_name,this.fld_hotel_address,this.fld_hotel_email,this.fld_hotel_phone,this.fld_hotel_star})){
                 Helper.showMessage("fill");
             } else {
                 boolean result;
+                // Create a Hotel object with the entered data
                 final Hotel obj = getHotel();
+                // Save the hotel using the HotelManager
                 result = hotelManager.save(obj);
 
+                // Show appropriate message based on the result of the operation
                 if (result){
                     Helper.showMessage("done");
                     dispose();
@@ -51,7 +52,7 @@ public class HotelAddView extends Layout {
 
         });
     }
-
+    // Method to create a Hotel object with the entered data
     private Hotel getHotel() {
         String name = fld_hotel_name.getText();
         String address = fld_hotel_address.getText();

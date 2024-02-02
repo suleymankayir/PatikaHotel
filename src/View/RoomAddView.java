@@ -53,40 +53,48 @@ public class RoomAddView extends Layout{
         this.pensionManager = new PensionManager();
         this.seasonManager = new SeasonManager();
 
+        // Load hotels into hotel comboBox
         loadFilterHotel();
 
+        // ActionListener for hotel comboBox
         this.cmb_addHotel_room.addActionListener(e -> {
             ComboItem selectedHotelItem = (ComboItem) this.cmb_addHotel_room.getSelectedItem();
             int selectedHotelId = selectedHotelItem.getKey();
+            // Load seasons for the selected hotel
             ArrayList<Season> seasons = this.seasonManager.getByListHotelId(selectedHotelId);
             updateSeasonBox(seasons);
-
+            // Load pensions for the selected hotel
             ArrayList<Pension> pensions = this.pensionManager.getByListHotelId(selectedHotelId);
             updatePensionComboBox(pensions);
         });
 
+        // Load seasons into season comboBox
         loadFilterSeason();
 
+        // Load all pensions into pension comboBox
         for (Pension pension : this.pensionManager.findAll()){
             this.cmb_addPension_room.addItem(pension.getComboItem());
         }
 
+        // Set model for room type comboBox
         this.cmb_addType_room.setModel(new DefaultComboBoxModel<>(Room.ROOMS.values()));
 
+        // ActionListener for save room button
         btn_save_room.addActionListener(e -> {
             if (Helper.isFieldListEmpty(new JTextField[]{this.fld_room_stock,this.fld_room_m2,this.fld_room_bed_number,this.fld_room_price_adult,this.fld_room_price_child})){
                 Helper.showMessage("fill");
             }else {
                 Room obj = new Room();
+                // Get selected hotel ID
                 ComboItem selectedHotelItem = (ComboItem) cmb_addHotel_room.getSelectedItem();
                 obj.setHotel_id(selectedHotelItem.getKey());
-
+                // Get selected season ID
                 ComboItem selectedSeasonItem = (ComboItem) cmb_addSeason_room.getSelectedItem();
                 obj.setSeason_id(selectedSeasonItem.getKey());
-
+                // Get selected pension ID
                 ComboItem selectedPensionItem = (ComboItem) cmb_addPension_room.getSelectedItem();
                 obj.setPension_id(selectedPensionItem.getKey());
-
+                // Set room details
                 System.out.println(selectedHotelItem.getKey());
                 System.out.println(selectedSeasonItem.getKey());
                 System.out.println(selectedPensionItem.getKey());
@@ -114,6 +122,7 @@ public class RoomAddView extends Layout{
 
     }
 
+    // Method to load hotels into hotel comboBox
     public void loadFilterHotel(){
         this.cmb_addHotel_room.removeAllItems();
         for (Hotel obj : this.hotelManager.findAll()){
@@ -122,7 +131,7 @@ public class RoomAddView extends Layout{
         this.cmb_addHotel_room.setSelectedItem(null);
     }
 
-
+    // Method to load seasons into season comboBox
     public void loadFilterSeason(){
         this.cmb_addSeason_room.removeAllItems();
         for (Season obj : this.seasonManager.findAll()){
@@ -131,12 +140,15 @@ public class RoomAddView extends Layout{
         this.cmb_addSeason_room.setSelectedItem(null);
     }
 
+    // Method to update pension combo box based on selected hotel
     private void updatePensionComboBox(ArrayList<Pension> pensions){
         cmb_addPension_room.removeAllItems();
         for (Pension pension: pensions){
             cmb_addPension_room.addItem(pension.getComboItem());
         }
     }
+
+    // Method to update season combo box based on selected hotel
     private void updateSeasonBox(ArrayList<Season> seasons){
         cmb_addSeason_room.removeAllItems();
         for (Season season: seasons){

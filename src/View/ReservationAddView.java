@@ -54,6 +54,7 @@ public class ReservationAddView extends Layout {
     ReservationAddView(Reservation reservation,Room room, String inDate, String outDate, int adultNum, int childNum) {
         this.add(container);
         this.room = room;
+        // If the reservation is null, create a new one; otherwise, use the provided reservation
         if (reservation == null){
             this.reservation = new Reservation();
         } else {
@@ -65,6 +66,7 @@ public class ReservationAddView extends Layout {
         guiInitialize(900, 900);
 
         // Hotel Panel
+
         this.fld_hotel_name.setText(room.getHotel().getHotel_name());
         this.radio_btn_carpark.setSelected(room.getHotel().isCarpark());
         this.radio_btn_consierge.setSelected(room.getHotel().isConcierge());
@@ -75,6 +77,7 @@ public class ReservationAddView extends Layout {
         this.radio_btn_gym.setSelected(room.getHotel().isGym());
 
         // Room Panel
+
         this.fld_room_type.setText(room.getRoom_type().toString());
         this.fld_bed_number.setText(String.valueOf(room.getBed_number()));
         this.fld_room_m2.setText(String.valueOf(room.getRoom_m2()));
@@ -94,13 +97,14 @@ public class ReservationAddView extends Layout {
         this.fld_adult_price.setText(String.valueOf(room.getPrice_adult()));
         this.fld_child_price.setText(String.valueOf(room.getPrice_child()));
 
+        // If reservation data exists, populate Reservation Panel components with that data
         if (this.reservation.getReservation_id() != 0){
             this.fld_guest_name.setText(this.reservation.getGuest_name());
             this.fld_guest_email.setText(this.reservation.getGuest_email());
             this.fld_guest_phone.setText(this.reservation.getGuest_phone());
             this.fld_guest_tcno.setText(this.reservation.getGuest_tcno());
         }
-
+        // Calculate and display the number of days between check-in and check-out dates
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate firstDate = LocalDate.parse(inDate, formatter);
         LocalDate lastDate = LocalDate.parse(outDate, formatter);
@@ -108,6 +112,7 @@ public class ReservationAddView extends Layout {
 
         this.fld_date_num.setText(String.valueOf(dateNum));
 
+        // Calculate and display the total price for the reservation
         int adultPrice = room.getPrice_adult();
         int childPrice = room.getPrice_child();
         int totalPrice = ((adultPrice * adultNum * dateNum) + (childPrice * childNum * dateNum));
@@ -115,6 +120,7 @@ public class ReservationAddView extends Layout {
 
 
         btn_res_save.addActionListener(e -> {
+            // Check if required fields are filled
             if (Helper.isFieldListEmpty(new JTextField[]{this.fld_guest_name,this.fld_guest_tcno,this.fld_guest_email,this.fld_guest_phone})){
                 Helper.showMessage("fill");
             } else {
@@ -130,11 +136,14 @@ public class ReservationAddView extends Layout {
                 res.setGuest_email(this.fld_guest_email.getText());
                 res.setGuest_phone(this.fld_guest_phone.getText());
 
+                // Save or update the reservation based on whether it already exists
                 if (res.getReservation_id() != 0){
                     result = this.reservationManager.update(res);
                 } else {
                     result = this.reservationManager.save(res);
                 }
+
+                // Show appropriate message based on the result of the operation
                 if (result){
                     Helper.showMessage("done");
                     dispose();

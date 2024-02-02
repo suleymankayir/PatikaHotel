@@ -28,7 +28,7 @@ public class LoginView extends Layout {
         this.guiInitialize(400,400);
 
         btn_login.addActionListener(e -> {
-            // login view'da bulunan username textfield'nın boş olup olmadığını tespit etmek için.
+            // to check field empty or not
             JTextField[] fieldCheckList = {this.fld_login_username,this.fld_login_password};
             if (Helper.isFieldListEmpty(fieldCheckList)){
                 Helper.showMessage("fill");
