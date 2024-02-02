@@ -259,14 +259,19 @@ public class EmployeeView extends Layout {
         this.tbl_room.setComponentPopupMenu(room_menu);
         btn_room_search.addActionListener(e -> {
             // Searching for rooms based on given criteria
-            String inDate = (this.fld_search_check_in.getText());
-            String outDate = (this.fld_search_check_out.getText());
-            int adultNum = Integer.parseInt(fld_num_adult.getText());
-            int childNum = Integer.parseInt(fld_num_child.getText());
-            if (adultNum + childNum <= 0) {
-                Helper.showMessage("Lütfen geçerli şekilde tarih veya kişi sayısı giriniz");
+
+            String adultNumText = (fld_num_adult.getText());
+            String childNumText = (fld_num_child.getText());
+            if (!isNumeric(adultNumText)) {
+                // Eğer adultNumText bir sayı değilse, kullanıcıya bir hata mesajı göster
+                Helper.showMessage(adultNumText + " Geçerli bir sayı değil.");
+                return; // Fonksiyonu burada sonlandır, çünkü devam etmek anlamsız olacaktır.
+            }
+            if (!isNumeric(childNumText)) {
+                Helper.showMessage(childNumText + " Geçerli bir sayı değil.");
                 return;
             }
+
 
             ArrayList<Room> roomList = this.roomManager.searchForRoom(
 
@@ -361,5 +366,16 @@ public class EmployeeView extends Layout {
         this.fld_search_check_in.setText("10/02/2023");
         this.fld_search_check_out.setText("15/02/2023");
 
+    }
+    private boolean isNumeric(String strNum) {
+        if (strNum == null) {
+            return false;
+        }
+        try {
+            int i = Integer.parseInt(strNum);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        return true;
     }
 }
