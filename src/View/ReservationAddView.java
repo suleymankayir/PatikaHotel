@@ -125,22 +125,22 @@ public class ReservationAddView extends Layout {
                 Helper.showMessage("fill");
             } else {
                 boolean result;
-                Reservation res = new Reservation();
-                res.setRoom_id(room.getRoom_id());
-                res.setCheck_in_date(LocalDate.parse(inDate, formatter));
-                res.setCheck_out_date(LocalDate.parse(outDate, formatter));
-                res.setTotal_price(Integer.parseInt(this.fld_total_price.getText()));
-                res.setGuest_num(adultNum+childNum);
-                res.setGuest_name(this.fld_guest_name.getText());
-                res.setGuest_tcno(this.fld_guest_tcno.getText());
-                res.setGuest_email(this.fld_guest_email.getText());
-                res.setGuest_phone(this.fld_guest_phone.getText());
+
+                this.reservation.setRoom_id(room.getRoom_id());
+                this.reservation.setCheck_in_date(LocalDate.parse(inDate, formatter));
+                this.reservation.setCheck_out_date(LocalDate.parse(outDate, formatter));
+                this.reservation.setTotal_price(Integer.parseInt(this.fld_total_price.getText()));
+                this.reservation.setGuest_num(adultNum+childNum);
+                this.reservation.setGuest_name(this.fld_guest_name.getText());
+                this.reservation.setGuest_tcno(this.fld_guest_tcno.getText());
+                this.reservation.setGuest_email(this.fld_guest_email.getText());
+                this.reservation.setGuest_phone(this.fld_guest_phone.getText());
 
                 // Save or update the reservation based on whether it already exists
-                if (res.getReservation_id() != 0){
-                    result = this.reservationManager.update(res);
+                if (this.reservation.getReservation_id() != 0){
+                    result = this.reservationManager.update(this.reservation);
                 } else {
-                    result = this.reservationManager.save(res);
+                    result = this.reservationManager.save(this.reservation);
                 }
 
                 // Show appropriate message based on the result of the operation

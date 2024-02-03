@@ -118,7 +118,8 @@ public class ReservationDao {
                 "guest_num = ?, " +
                 "total_price = ?, " +
                 "guest_email = ?, " +
-                "guest_phone = ?";
+                "guest_phone = ? " +
+                "WHERE reservation_id = ? ";
         try{
             PreparedStatement ps = this.con.prepareStatement(query);
             ps.setInt(1,reservation.getRoom_id());
@@ -130,6 +131,7 @@ public class ReservationDao {
             ps.setInt(7,reservation.getTotal_price());
             ps.setString(8,reservation.getGuest_email());
             ps.setString(9,reservation.getGuest_phone());
+            ps.setInt(10,reservation.getReservation_id());
             return ps.executeUpdate() != -1;
         }catch (SQLException e){
             e.printStackTrace();

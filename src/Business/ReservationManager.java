@@ -30,7 +30,7 @@ public class ReservationManager {
     }
 
     public boolean update(Reservation reservation) {
-        if (this.getById(reservation.getReservation_id()) != null) {
+        if (this.getById(reservation.getReservation_id()) == null) {
             Helper.showMessage(reservation.getReservation_id() + "ID kayıtlı oda bulunamadı");
             return false;
         }
