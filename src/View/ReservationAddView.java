@@ -103,6 +103,7 @@ public class ReservationAddView extends Layout {
             this.fld_guest_email.setText(this.reservation.getGuest_email());
             this.fld_guest_phone.setText(this.reservation.getGuest_phone());
             this.fld_guest_tcno.setText(this.reservation.getGuest_tcno());
+
         }
         // Calculate and display the number of days between check-in and check-out dates
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -135,6 +136,8 @@ public class ReservationAddView extends Layout {
                 this.reservation.setGuest_tcno(this.fld_guest_tcno.getText());
                 this.reservation.setGuest_email(this.fld_guest_email.getText());
                 this.reservation.setGuest_phone(this.fld_guest_phone.getText());
+                this.reservation.setAdult_number(Integer.parseInt(this.fld_adult_num.getText()));
+                this.reservation.setChild_number(Integer.parseInt(this.fld_child_num.getText()));
 
                 // Save or update the reservation based on whether it already exists
                 if (this.reservation.getReservation_id() != 0){

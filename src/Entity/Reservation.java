@@ -17,6 +17,8 @@ public class Reservation {
     private String guest_email;
     private String guest_phone;
     private Room room;
+    private int child_number;
+    private int adult_number;
 
     public Reservation(){
 
@@ -112,5 +114,19 @@ public class Reservation {
         this.room = room;
     }
 
+    public int getChild_number() {
+        return child_number;
+    }
 
+    public void setChild_number(int child_number) {
+        this.child_number = child_number;
+    }
+
+    public int getAdult_number() {
+        return adult_number;
+    }
+
+    public void setAdult_number(int adult_number) {
+        this.adult_number = adult_number;
+    }
 }

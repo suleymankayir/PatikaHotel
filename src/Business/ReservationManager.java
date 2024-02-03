@@ -60,6 +60,7 @@ public class ReservationManager {
             rowObject[i++] = obj.getTotal_price();
             rowObject[i++] = obj.getGuest_email();
             rowObject[i++] = obj.getGuest_phone();
+
             resList.add(rowObject);
 
         }

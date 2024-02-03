@@ -14,7 +14,9 @@ import javax.swing.text.MaskFormatter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.text.ParseException;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class EmployeeView extends Layout {
     private JPanel container;
@@ -318,11 +320,14 @@ public class EmployeeView extends Layout {
             Reservation selectReservation = this.reservationManager.getById(selectedReservationId);
             int selectedRoomId = selectReservation.getRoom_id();
             Room selectedRoom = this.roomManager.getById(selectedRoomId);
-            String inDate = (this.fld_search_check_in.getText());
-            String outDate = (this.fld_search_check_out.getText());
-            int adultNum = Integer.parseInt(this.fld_num_adult.getText());
-            int childNum = Integer.parseInt(this.fld_num_child.getText());
-            ReservationAddView reservationAddView = new ReservationAddView(selectReservation, selectedRoom, inDate, outDate, adultNum, childNum);
+
+            ReservationAddView reservationAddView = new ReservationAddView(
+                    selectReservation,
+                    selectedRoom,
+                    selectReservation.getCheck_in_date().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                    selectReservation.getCheck_out_date().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                    selectReservation.getAdult_number(),
+                    selectReservation.getChild_number());
             reservationAddView.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent e) {

@@ -43,9 +43,11 @@ public class ReservationDao {
                 "guest_num, " +
                 "total_price, " +
                 "guest_email, " +
-                "guest_phone" +
+                "guest_phone, " +
+                "adult_num, " +
+                "child_num" +
                 ")" +
-                " VALUES (?,?,?,?,?,?,?,?,?)";
+                " VALUES (?,?,?,?,?,?,?,?,?,?,?)";
         try{
             PreparedStatement ps = this.con.prepareStatement(query);
             ps.setInt(1,reservation.getRoom_id());
@@ -57,6 +59,8 @@ public class ReservationDao {
             ps.setInt(7,reservation.getTotal_price());
             ps.setString(8,reservation.getGuest_email());
             ps.setString(9,reservation.getGuest_phone());
+            ps.setInt(10,reservation.getAdult_number());
+            ps.setInt(11,reservation.getChild_number());
             return ps.executeUpdate() != -1;
         }catch (SQLException e){
             e.printStackTrace();
@@ -76,6 +80,8 @@ public class ReservationDao {
         obj.setTotal_price(rs.getInt("total_price"));
         obj.setGuest_email(rs.getString("guest_email"));
         obj.setGuest_phone(rs.getString("guest_phone"));
+        obj.setAdult_number(rs.getInt("adult_num"));
+        obj.setChild_number(rs.getInt("child_num"));
         obj.setRoom(this.roomDao.getById(rs.getInt("room_id")));
         return obj;
 
@@ -118,7 +124,9 @@ public class ReservationDao {
                 "guest_num = ?, " +
                 "total_price = ?, " +
                 "guest_email = ?, " +
-                "guest_phone = ? " +
+                "guest_phone = ?, " +
+                "adult_num = ?, " +
+                "child_num = ? " +
                 "WHERE reservation_id = ? ";
         try{
             PreparedStatement ps = this.con.prepareStatement(query);
@@ -131,7 +139,9 @@ public class ReservationDao {
             ps.setInt(7,reservation.getTotal_price());
             ps.setString(8,reservation.getGuest_email());
             ps.setString(9,reservation.getGuest_phone());
-            ps.setInt(10,reservation.getReservation_id());
+            ps.setInt(10,reservation.getAdult_number());
+            ps.setInt(11,reservation.getChild_number());
+            ps.setInt(12,reservation.getReservation_id());
             return ps.executeUpdate() != -1;
         }catch (SQLException e){
             e.printStackTrace();
