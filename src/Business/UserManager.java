@@ -67,12 +67,12 @@ public class UserManager {
         return userObjList;
     }
 
-    public ArrayList<User> searchForTable(int userId){
+    public ArrayList<User> searchForTable(String userRole){
         String select = "SELECT * FROM public.user";
         ArrayList<String> whereList = new ArrayList<>();
 
-        if (userId != 0){
-            whereList.add("user_id = " + userId);
+        if (userRole != null){
+            whereList.add("user_role =" + "'"+ userRole + "'");
         }
 
         String whereStr = String.join(" AND ", whereList);
@@ -80,6 +80,7 @@ public class UserManager {
         if (whereStr.length() > 0){
             query += " WHERE " + whereStr;
         }
+        System.out.println(query);
         return this.userDao.selectByQuery(query);
     }
 }

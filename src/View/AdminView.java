@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class AdminView extends Layout {
     private JPanel container;
@@ -73,9 +75,16 @@ public class AdminView extends Layout {
     public void loadUserFilter() {
         // Removing all items from role combo box
         this.adm_cmb_role.removeAllItems();
-        // Populating role combo box with user roles
+        // Populating role combo box with unique user roles
+
+        Set<String> addedRoles = new HashSet<>(); // Set to store added roles
+
         for (User obj : userManager.findAll()) {
-            this.adm_cmb_role.addItem(new ComboItem(obj.getId(), obj.getRole()));
+            String role = obj.getRole();
+            if (!addedRoles.contains(role)) { // Check if role is already added
+                this.adm_cmb_role.addItem(new ComboItem(obj.getId(), role));
+                addedRoles.add(role); // Add role to set to prevent duplicates
+            }
         }
         // Setting selected item to null
         this.adm_cmb_role.setSelectedItem(null);
@@ -138,12 +147,12 @@ public class AdminView extends Layout {
         // Adding action listener for search button
         adm_search_btn.addActionListener(e -> {
             ComboItem selectedUser = (ComboItem) this.adm_cmb_role.getSelectedItem();
-            int userId = 0;
+            String userRole = null;
             if (selectedUser != null) {
-                userId = selectedUser.getKey();
+                userRole = selectedUser.getValue();
             }
             // Searching for users based on selected role
-            ArrayList<User> userListBySearch = this.userManager.searchForTable(userId);
+            ArrayList<User> userListBySearch = this.userManager.searchForTable(userRole);
             ArrayList<Object[]> userRowListBySearch = this.userManager.getForTable(this.col_admin.length, userListBySearch);
             // Loading user table with search results
             loadUserTable(userRowListBySearch);
